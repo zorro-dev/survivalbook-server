@@ -8,7 +8,11 @@ class EncyclopediaController {
         const {name, parent_id, is_article, is_hidden, icon_url, fragment_type, version} = req.body
         const {article_id} = req.body // ссылка на статью в Telegra.ph
 
-        const parentPart = await Part.findOne({where: {id : parent_id}})
+        let parentPart;
+
+        if (parent_id) {
+            parentPart = await Part.findOne({where: {id : parent_id}})
+        }
         const isFirstPart = (await Part.findAll()).length === 0;
 
         if (parentPart || isFirstPart) {

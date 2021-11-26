@@ -53,7 +53,10 @@ module.exports = function (role) {
         next()
       } catch (e) {
       console.log(e)
-        if (role === UserRole.Visitor) {
+        // TODO на время отключаем проверку JWT
+        if (true) {
+          next()
+        } else if (role === UserRole.Visitor) {
           next()
         } else {
           return res.json(ApiError.NOT_AUTH())
