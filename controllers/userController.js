@@ -1,70 +1,109 @@
 require('dotenv').config()
 
 const ApiError = require('../error/ApiError')
-const {User} = require('../models/models')
+const {User, Account} = require('../models/models')
+
 const jwt = require('jsonwebtoken')
+const {promisify} = require("util")
+const request = require("request")
+
 const {AuthType} = require("../models/constants");
 
-const generateJwt = (id, email, role) => {
-    return jwt.sign(
-        {id, email, role},
-        process.env.JWT_KEY,
-        {expiresIn: '24h'})
+const generateJwt = (payload) => {
+  return jwt.sign(
+    payload,
+    process.env.JWT_KEY,
+    {expiresIn: '24h'})
 }
 
-const validateRegistration = async (uid, email) => {
-    if (!uid) return ApiError.REQUIRED_FIELD_EMPTY('uid')
-    if (!email) return ApiError.REQUIRED_FIELD_EMPTY('email')
-    const candidate = await User.findOne({where: {email}})
-    if (candidate) return ApiError.EMAIL_ALREADY_EXIST()
+const decodeFirebaseIdToken = async (firebaseIdToken) => {
+  const rp = promisify(request);
+
+  const googleSecurityKeys = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
+
+  const response = await rp(googleSecurityKeys);
+  const publicKeys = JSON.parse(response.body);
+
+  const header64 = firebaseIdToken.split('.')[0];
+
+  const header = JSON.parse(Buffer.from(header64, 'base64').toString('ascii'));
+  return jwt.verify(firebaseIdToken, publicKeys[header.kid], {algorithms: ['RS256']})
 }
 
-const validateLogin = (uid, email) => {
-    if (!uid) return ApiError.REQUIRED_FIELD_EMPTY('uid')
-    if (!email) return ApiError.REQUIRED_FIELD_EMPTY('email')
+const getJwtPayload = (account) => {
+  return {
+    id: account.id,
+    uid: account.uid,
+    rights: account.rights,
+    attributes: account.attributes
+  }
 }
 
 class UserController {
 
-    async registration(req, res, next) {
-        const {uid, email} = req.body;
+  async authFirebaseUser(req, res, next) {
+    const {firebaseIdToken} = req.body;
 
-        const validateError = await validateRegistration(uid, email)
-        if (validateError) return next(validateError)
+    const decoded = await decodeFirebaseIdToken(firebaseIdToken)
 
-        const user = await User.create({uid, email})
-        const token = generateJwt(user.id, email, user.role)
+    console.log(decoded);
 
-        return res.json({token: token})
+    const sign_in_provider = decoded.firebase.sign_in_provider
+    const uid = decoded.user_id
+    const iat = decoded.iat
+    const exp = decoded.exp
+    // TODO генерация имен
+    const name = decoded.name ? decoded.name : "username"
+
+    let account = await Account.findOne({where: {uid}})
+
+    if (account) {
+      const isNewProvider = !account.sign_in_providers.includes(sign_in_provider)
+      if (isNewProvider) {
+        account.sign_in_providers.push(sign_in_provider)
+      }
+
+      const updateResponse = await Account.update({sign_in_providers: account.sign_in_providers},
+        {
+          where: {id: account.id},
+          returning: true
+        })
+
+      account = updateResponse[1][0]
+    } else {
+      const attributes = {
+        picture: decoded.picture,
+        email: decoded.email,
+        name
+      }
+
+      const sign_in_providers = []
+      sign_in_providers.push(sign_in_provider)
+
+      const rights = []
+
+      account = await Account.create({uid, attributes, rights, sign_in_providers})
     }
 
-    async login(req, res, next) {
-        const {uid, email, auth_type} = req.body;
+    const token = generateJwt(getJwtPayload(account))
 
-        const validateError = validateLogin(uid, email)
-        if (validateError) return next(validateError)
+    return res.json({
+      token,
+      account
+    })
+  }
 
-        let user = await User.findOne({where: {email}})
+  async check(req, res, next) {
+    const id = req.auth.id
 
-        if (!user) {
-            if (auth_type === AuthType.Google) {
-                user = await User.create({uid, email})
-            } else {
-                return next(ApiError.USER_WITH_SOME_EMAIL_NOT_FOUND())
-            }
-        }
+    const account = await Account.findOne({where: {id}})
 
-        if (user.uid !== uid) return next(ApiError.INVALID_UID_OR_EMAIL())
+    const token = generateJwt(getJwtPayload(account))
 
-        const token = generateJwt(user.id, email, user.role)
-
-        return res.json({token: token})
-    }
-
-    async check(req, res, next) {
-        const token = generateJwt(req.user.id, req.user.email, req.user.role)
-        return res.json({token: token})
-    }
+    return res.json({
+      token, account
+    })
+  }
 }
 
 module.exports = new UserController()

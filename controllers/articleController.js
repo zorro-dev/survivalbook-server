@@ -1,8 +1,9 @@
-const {Part, ContentPart} = require('../models/models')
+const {EncyclopediaPart, Part, ContentPart} = require('../models/models')
 const ApiError = require('../error/ApiError')
 const stemmer = require('../utils/stemming')
 const {FavoriteArticle} = require("../models/models");
 const {Article} = require("../models/models");
+const constants = require("../models/constants");
 
 class ArticleController {
 
@@ -14,17 +15,26 @@ class ArticleController {
         console.log(version)
         console.log(parent_id)
 
-        const parentPart = await Part.findOne({where: {id: parent_id}})
+        const parentPart = await EncyclopediaPart.findOne({where: {id: parent_id}})
+
+        console.log(parentPart)
+
         if (!parentPart) {
             // TODO не найден родительский раздел
             console.log("TODO не найден родительский раздел")
-        } else if (!parentPart.is_article) {
+        } else if (parentPart.child.type !== constants.EncyclopediaPart_RelationshipType.Article) {
             // TODO родительский раздел не является статьей
             console.log("TODO родительский раздел не является статьей")
         } else {
             const article = await Article.create({name, content, version})
-            await Part.update(
-                {article_id: article.id},
+
+            const encyclopediaPart = await EncyclopediaPart.findOne({where: {id: parent_id}})
+
+            const child = encyclopediaPart.child
+            child.id = article.id
+
+            await EncyclopediaPart.update(
+                { child },
                 {where: {id: parent_id}}
             ).catch(err => {
                 //res.send()
@@ -44,11 +54,11 @@ class ArticleController {
         console.log(version)
         console.log(parent_id)
 
-        const parentPart = await Part.findOne({where: {id: parent_id}})
+        const parentPart = await EncyclopediaPart.findOne({where: {id: parent_id}})
         if (!parentPart) {
             // TODO не найден родительский раздел
             console.log("TODO не найден родительский раздел")
-        } else if (!parentPart.is_article) {
+        } else if (parentPart.child.type !== constants.EncyclopediaPart_RelationshipType.Article) {
             // TODO родительский раздел не является статьей
             console.log("TODO родительский раздел не является статьей")
         } else {

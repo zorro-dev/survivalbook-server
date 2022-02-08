@@ -1,6 +1,7 @@
 const sequelize = require('../db')
 const {DataTypes} = require('sequelize')
 const {UserRole} = require('../models/constants')
+const constants = require('../models/constants')
 
 const User = sequelize.define('user', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -9,15 +10,40 @@ const User = sequelize.define('user', {
     role: {type: DataTypes.STRING, defaultValue: UserRole.User},
 })
 
-const Part = sequelize.define('part', {
+const defaultAccountAttributes = {}
+const defaultAccountRights = []
+
+const Account = sequelize.define('account', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, allowNull: false},
-    version: {type: DataTypes.INTEGER, allowNull: false},
-    is_article: {type: DataTypes.BOOLEAN, allowNull: false},
-    article_id: {type: DataTypes.STRING},
-    is_hidden: {type: DataTypes.BOOLEAN, allowNull: false},
-    icon_url: {type: DataTypes.STRING, allowNull: false},
-    fragment_type: {type: DataTypes.STRING}
+    uid: {type: DataTypes.STRING, unique: true, allowNull: false},
+    attributes: {type: DataTypes.JSONB, allowNull: false, defaultValue: defaultAccountAttributes},
+    rights: {type: DataTypes.JSONB, allowNull: false, defaultValue: defaultAccountRights},
+    sign_in_providers: {type: DataTypes.JSONB, allowNull: false},
+})
+
+const defaultEncyclopediaPartAttributes = {
+    fragment_type: constants.EncyclopediaPart_FragmentType.LinearListFragment,
+    icon_url: "default_icon_url" // TODO заменить на реальное значение
+}
+// TODO : если при создании разделу не был назначени родительский раздел,
+// закидываем его в специальный раздел, который будет сборником таких разделов
+// тоже самое можно делать с удаленными разделами, для них использовать другой раздел
+const defaultEncyclopediaPartParent = {
+    type: constants.EncyclopediaPart_RelationshipType.Part,
+    id : 0 // TODO заменить на реальное значение
+}
+const defaultEncyclopediaPartChild = {
+    type: constants.EncyclopediaPart_RelationshipType.Part,
+    id : 0 // TODO заменить на реальное значение
+}
+const EncyclopediaPart = sequelize.define('encyclopedia_part', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false, defaultValue: "Название раздела"},
+    version: {type: DataTypes.INTEGER, allowNull: false, defaultValue: 1},
+    visibility: {type: DataTypes.STRING, allowNull: false, defaultValue: constants.EncyclopediaPart_Visibility.Visible},
+    attributes: {type: DataTypes.JSONB, allowNull: false, defaultValue: defaultEncyclopediaPartAttributes},
+    parent: {type: DataTypes.JSONB, allowNull: false, defaultValue: defaultEncyclopediaPartParent},
+    child: {type: DataTypes.JSONB, allowNull: false, defaultValue: defaultEncyclopediaPartChild},
 })
 
 const FavoritePart = sequelize.define('favorite_part', {
@@ -90,14 +116,9 @@ const LastReadMessage  = sequelize.define('last_read_message', {
     message_id: {type: DataTypes.STRING, allowNull: false},
 })
 
-
-
-// для обновления базы данных
-// sequelize.sync({alter: true})
-
 module.exports = {
     User,
-    Part,
+    Part: EncyclopediaPart,
     Article,
     ContentPart,
     FavoritePart,
@@ -108,4 +129,7 @@ module.exports = {
     ForumMessage,
     TrackedTheme,
     LastReadMessage,
+
+    Account,
+    EncyclopediaPart,
 }
