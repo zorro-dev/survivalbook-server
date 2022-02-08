@@ -34,7 +34,6 @@ const defaultEncyclopediaPartParent = {
 }
 const defaultEncyclopediaPartChild = {
     type: constants.EncyclopediaPart_RelationshipType.Part,
-    id : 0 // TODO заменить на реальное значение
 }
 const EncyclopediaPart = sequelize.define('encyclopedia_part', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},

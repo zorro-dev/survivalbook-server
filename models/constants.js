@@ -26,9 +26,9 @@ class EncyclopediaPart_RelationshipType {
 }
 
 class EncyclopediaPart_Visibility {
-    static Visible = "Visible"
-    static Invisible = "Invisible"
-    static Development = "Development"
+    static Visible = "visible"
+    static Invisible = "invisible"
+    static Development = "development"
 }
 
 class EncyclopediaPart_FragmentType {

@@ -13,10 +13,14 @@ class EncyclopediaController {
   }
 
   async updatePart(req, res, next) {
-    const {id, name, version, visibility, attributes, parent, child} = req.body
+    let {id, name, version, visibility, attributes, parent, child} = req.body.part
+
+    console.log(req.body)
 
     // TODO добавить проверку присылаемых данных
     if (!id) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('id'))
+
+    version += 1
 
     const updateResponse = await EncyclopediaPart.update(
       {name, version, visibility, attributes, parent, child},
