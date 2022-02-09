@@ -4,6 +4,7 @@ const stemmer = require('../utils/stemming')
 const {FavoriteArticle} = require("../models/models");
 const {Article} = require("../models/models");
 const constants = require("../models/constants");
+const request = require('request');
 
 class ArticleController {
 
@@ -97,7 +98,6 @@ class ArticleController {
             // TODO статья не найдена
         }
     }
-
 }
 
 function validatePart(part) {

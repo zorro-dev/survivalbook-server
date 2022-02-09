@@ -25,8 +25,8 @@ const start = async () => {
     try {
         await sequelize.authenticate()
         // для обновления базы данных
-        //await sequelize.sync({alter: true})
-        await sequelize.sync()
+        await sequelize.sync({alter: true})
+        //await sequelize.sync()
         server.listen(PORT, () => console.log(`server started on port ${PORT}`))
     } catch (e) {
         console.log(e)
