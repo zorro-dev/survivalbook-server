@@ -9,6 +9,8 @@ router.post("/createPart", checkRole(UserRole.Admin), encyclopediaController.cre
 router.post("/updatePart", checkRole(UserRole.Admin), encyclopediaController.updatePart)
 router.post("/removePart", checkRole(UserRole.Admin), encyclopediaController.removePart)
 router.get("/", encyclopediaController.getParts)
+router.get("/statistics", encyclopediaController.getStatistics)
+
 router.get("/library", encyclopediaController.getLibrary)
 router.get("/:id", encyclopediaController.getOne)
 

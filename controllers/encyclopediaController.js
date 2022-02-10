@@ -1,4 +1,5 @@
-const {EncyclopediaPart, Part, ContentPart} = require('../models/models')
+const {EncyclopediaPart, Part, ContentPart, Article} = require('../models/models')
+const {EncyclopediaPart_RelationshipType} = require('../models/constants')
 const ApiError = require('../error/ApiError')
 const stemmer = require('../utils/stemming')
 
@@ -44,6 +45,37 @@ class EncyclopediaController {
     if (encyclopediaPart) await encyclopediaPart.destroy()
 
     return res.json()
+  }
+
+  async getStatistics(req, res) {
+    const parts = await EncyclopediaPart.findAll()
+    const articles = await Article.findAll()
+
+    const partsWithArticle = []
+    const partsWithArticleLink = []
+    parts.map(p => {
+      if (p.child.type === EncyclopediaPart_RelationshipType.Article) {
+        partsWithArticle.push(p)
+        if (p.child.id !== "") {
+          partsWithArticleLink.push(p)
+        }
+      }
+    })
+
+    const filledPartsPercent = ((articles.length / partsWithArticle.length) * 100).toFixed(2);
+    const linkedPartsPercent = ((partsWithArticleLink.length / partsWithArticle.length) * 100).toFixed(2);
+
+    return res.json({
+      parts : {
+        total: parts.length,
+        with_articles: partsWithArticle.length,
+        filled_percent: filledPartsPercent,
+        linked_percent: linkedPartsPercent,
+      },
+      articles : {
+        total: articles.length
+      }
+    })
   }
 
   async getParts(req, res, next) {

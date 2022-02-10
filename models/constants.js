@@ -4,11 +4,6 @@ class UserRole {
     static Admin = "Admin"
 }
 
-class AuthType {
-    static Email = "Email"
-    static Google = "Google"
-}
-
 class SignInProvider {
     static custom  = "custom"
     static password = "password"
@@ -38,6 +33,6 @@ class EncyclopediaPart_FragmentType {
 }
 
 module.exports = {
-    UserRole, AuthType,
+    UserRole,
     EncyclopediaPart_RelationshipType, EncyclopediaPart_Visibility, EncyclopediaPart_FragmentType
 }

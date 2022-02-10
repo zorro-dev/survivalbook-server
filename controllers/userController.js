@@ -1,13 +1,11 @@
 require('dotenv').config()
 
 const ApiError = require('../error/ApiError')
-const {User, Account} = require('../models/models')
+const {Account} = require('../models/models')
 
 const jwt = require('jsonwebtoken')
 const {promisify} = require("util")
 const request = require("request")
-
-const {AuthType} = require("../models/constants");
 
 const generateJwt = (payload) => {
   return jwt.sign(
