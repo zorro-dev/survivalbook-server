@@ -89,11 +89,12 @@ class ArticleController {
         }
 
         if (article) {
-            return res.json({
-                success: true,
-                is_favorite: !!favoriteArticle,
-                data: article.toJSON()
-            })
+            // return res.json({
+            //     success: true,
+            //     is_favorite: !!favoriteArticle,
+            //     data: article.toJSON()
+            // })
+            return res.json(article)
         } else {
             // TODO статья не найдена
         }

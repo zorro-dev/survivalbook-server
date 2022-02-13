@@ -86,8 +86,7 @@ class UserController {
     const token = generateJwt(getJwtPayload(account))
 
     return res.json({
-      token,
-      account
+      token, account
     })
   }
 
