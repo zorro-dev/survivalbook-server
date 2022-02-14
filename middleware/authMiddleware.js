@@ -18,8 +18,6 @@ module.exports = async function (req, res, next) {
       rights: decoded.rights
     }
 
-    console.log(req.auth)
-
     next()
   } catch (e) {
     return res.json(ApiError.NOT_AUTH())

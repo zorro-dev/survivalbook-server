@@ -1,15 +1,14 @@
 const Router = require('express')
 const router = new Router()
 const favoriteController = require('../controllers/favoriteController')
-const checkRole = require('../middleware/checkRoleMiddleware')
-const {UserRole} = require('../models/constants')
+const authMiddleware = require('../middleware/authMiddleware')
 
-router.post("/create", favoriteController.create)
-router.post("/remove", favoriteController.remove)
-router.post("/update", favoriteController.update)
-router.post("/state", favoriteController.changeArticleFavoriteState)
-router.post("/addToPart", favoriteController.addArticleToPart)
-router.post("/removeFromPart", favoriteController.removeArticleFromPart)
-router.get("/user/:user_id", favoriteController.getForUser)
+router.post("/create", authMiddleware, favoriteController.create)
+router.post("/remove", authMiddleware, favoriteController.remove)
+router.post("/update", authMiddleware, favoriteController.update)
+router.post("/state", authMiddleware, favoriteController.changeArticleFavoriteState)
+router.post("/addToPart", authMiddleware, favoriteController.addArticleToPart)
+router.post("/removeFromPart", authMiddleware, favoriteController.removeArticleFromPart)
+router.get("/byUser", authMiddleware, favoriteController.getForUser)
 
 module.exports = router

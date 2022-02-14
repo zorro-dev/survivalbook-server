@@ -50,16 +50,11 @@ const EncyclopediaPart = sequelize.define('encyclopedia_part', {
 const FavoritePart = sequelize.define('favorite_part', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, allowNull: false},
-  user_id: {type: DataTypes.STRING, allowNull: false},
   icon: {type: DataTypes.STRING, allowNull: false},
 })
 
 const FavoriteArticle = sequelize.define('favorite_article', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  part_id: {type: DataTypes.STRING, allowNull: false},
-  article_id: {type: DataTypes.STRING, allowNull: false},
-  user_id: {type: DataTypes.STRING, allowNull: false},
-  favorite_part_id: {type: DataTypes.STRING},
 })
 
 const Article = sequelize.define('article', {
@@ -116,6 +111,12 @@ const LastReadMessage = sequelize.define('last_read_message', {
   theme_id: {type: DataTypes.STRING, allowNull: false},
   message_id: {type: DataTypes.STRING, allowNull: false},
 })
+
+
+Account.hasMany(FavoriteArticle)
+Account.hasMany(FavoritePart)
+FavoriteArticle.belongsTo(FavoritePart)
+FavoriteArticle.belongsTo(Article)
 
 module.exports = {
   User,
