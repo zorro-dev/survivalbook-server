@@ -24,15 +24,17 @@ class ArticleController {
 
         let favoriteArticle = await FavoriteArticle.findOne({where: {articleId: article_id, accountId: account_id}})
         if (!favoriteArticle) {
-            await FavoriteArticle.create({articleId: article_id, accountId: account_id})
+            favoriteArticle = await FavoriteArticle.create({articleId: article_id, accountId: account_id})
 
             return res.json({
                 is_favorite: true,
+                favorite_article: favoriteArticle
             })
         } else {
             await favoriteArticle.destroy();
             return res.json({
-                is_favorite: false
+                is_favorite: false,
+                favorite_article: favoriteArticle
             })
         }
     }
