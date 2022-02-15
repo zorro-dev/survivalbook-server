@@ -7,7 +7,7 @@ class ArticleController {
 
     async create(req, res, next) {
         const {name, icon} = req.body
-
+        const account_id = req.auth.id
 
         const account = await Account.findOne({where: {id: account_id}})
         if (!account) {
