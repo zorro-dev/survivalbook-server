@@ -7,7 +7,7 @@ class ArticleController {
 
     async create(req, res, next) {
         const {name, icon} = req.body
-        const account_id = req.auth.id
+
 
         const account = await Account.findOne({where: {id: account_id}})
         if (!account) {
@@ -19,7 +19,8 @@ class ArticleController {
     }
 
     async changeArticleFavoriteState(req, res, next) {
-        const {article_id, account_id} = req.body
+        const {article_id} = req.body
+        const account_id = req.auth.id
 
         let favoriteArticle = await FavoriteArticle.findOne({where: {articleId: article_id, accountId: account_id}})
         if (!favoriteArticle) {
