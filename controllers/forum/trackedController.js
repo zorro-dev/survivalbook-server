@@ -1,39 +1,38 @@
 const ApiError = require("../../error/ApiError");
 const {ForumTheme} = require("../../models/models");
 const TextUtils = require('../../utils/TextUtils')
+const {ForumLastReadMessage} = require("../../models/models");
 const {ForumMessage} = require("../../models/models");
 const {LastReadMessage} = require("../../models/models");
-const {TrackedTheme} = require("../../models/models");
+const {ForumTrackedTheme} = require("../../models/models");
 
 class ThemeController {
 
     async changeState(req, res, next) {
         let {theme_id} = req.body
 
-        theme_id = theme_id.toString()
-        const user_id = req.user.id.toString()
-
         if (TextUtils.isEmpty(theme_id)) { return next(ApiError.REQUIRED_FIELD_EMPTY('theme_id')) }
 
-        let trackedTheme = await TrackedTheme.findOne({where: {user_id, theme_id}});
+        const forumThemeId = theme_id
+        const accountId = req.auth.id
+
+        let trackedTheme = await ForumTrackedTheme.findOne({where: {accountId, forumThemeId}});
 
         const theme = await ForumTheme.findOne({where: {id: theme_id}})
 
         if (!theme) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('ForumTheme'))
 
         if (!trackedTheme) {
-            await TrackedTheme.create({user_id, theme_id});
+            await ForumTrackedTheme.create({accountId, forumThemeId});
             return res.json({
-                success: true,
                 is_tracked: true,
                 theme
             })
         } else {
-            const trackedTheme = await TrackedTheme.findOne({where: {user_id, theme_id}});
+            const trackedTheme = await ForumTrackedTheme.findOne({where: {accountId, forumThemeId}});
             await trackedTheme.destroy()
 
             return res.json({
-                success: true,
                 is_tracked: false,
                 theme
             })
@@ -41,46 +40,53 @@ class ThemeController {
     }
 
     async getAll(req, res, next) {
-        const {chunk} = req.query
+        const accountId = req.auth.id
 
-        if (TextUtils.isEmpty(chunk)) { return next(ApiError.REQUIRED_FIELD_EMPTY('chunk')) }
+        let trackedThemes = await ForumTrackedTheme.findAll({where : {accountId}});
 
-        const user_id = req.user.id.toString()
+        for (let i = 0; i < trackedThemes.length; i ++) {
+            let trackedTheme = trackedThemes[i]
 
-        const chunk_size = 10
+            const forumThemeId = trackedTheme.forumThemeId
 
-        let trackedThemes = await TrackedTheme.findAndCountAll({where : {user_id}, offset: chunk_size * Number.parseInt(chunk) - chunk_size, limit: 10});
+            console.log("forumThemeId: " + forumThemeId)
 
-        for (let i = 0; i < trackedThemes.rows.length; i ++) {
-            let trackedTheme = trackedThemes.rows[i]
+            const lastReadMessage = await ForumLastReadMessage.findOne({where: {accountId, forumThemeId}})
 
-            const theme_id = trackedTheme.theme_id.toString()
-
-            const lastReadMessage = await LastReadMessage.findOne({where: {user_id, theme_id}})
+            console.log("lastReadMessage: " + JSON.stringify(lastReadMessage))
 
             let lastRead_message_id = 0
 
-            if (lastReadMessage) lastRead_message_id = Number.parseInt(lastReadMessage.message_id)
+            if (lastReadMessage) lastRead_message_id = lastReadMessage.toJSON().forumMessageId
 
-            const themeMessages = await ForumMessage.findAndCountAll({where: {theme_id}, offset: 1, limit: 1})
+
+            console.log("lastReadMessage: " + lastReadMessage)
+
+            const themeMessages = await ForumMessage.findAndCountAll({where: {forumThemeId}, offset: 1, limit: 1})
+
+            console.log("themeMessages.count: " + themeMessages.count)
+
             const notReadMessages = themeMessages.count - lastRead_message_id
 
-            let answeredMessages = await ForumMessage.findAll({where: {theme_id, answer_to_user: user_id}})
+            console.log("notReadMessages: " + notReadMessages)
 
-            answeredMessages = answeredMessages.filter(message => message.id > lastRead_message_id && message.user_id !== user_id)
+            let answeredMessages = await ForumMessage.findAll({where: {forumThemeId, answer_to_account: accountId}})
+
+            console.log("answeredMessages: " + answeredMessages.length)
+
+            answeredMessages = answeredMessages.filter(message => message.id > lastRead_message_id && message.toJSON().accountId !== accountId)
+
+            console.log("answeredMessages: " + answeredMessages.length)
 
             trackedTheme = trackedTheme.toJSON()
             trackedTheme.last_read_message_id = lastRead_message_id
             trackedTheme.not_read_message = notReadMessages
             trackedTheme.answered_messages = answeredMessages.length
 
-            trackedThemes.rows[i] = trackedTheme
+            trackedThemes[i] = trackedTheme
         }
 
-        return res.json({
-            success: true,
-            trackedThemes
-        })
+        return res.json(trackedThemes)
     }
 }
 

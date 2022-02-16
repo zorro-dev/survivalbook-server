@@ -160,10 +160,18 @@ class ThemeController {
     const accountId = req.auth.id
     const forumThemeId = theme_id
 
+    let answer_to_account
+
+    if (answer_to) {
+      const answerMessage = await ForumMessage.findOne({where: {id: answer_to}})
+      if (answerMessage) answer_to_account = answerMessage.toJSON().accountId
+    }
+
     const message = await ForumMessage.create({
       accountId,
       text,
       answer_to,
+      answer_to_account,
       is_removed: false,
       forumThemeId
     });

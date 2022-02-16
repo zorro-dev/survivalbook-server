@@ -94,6 +94,7 @@ const ForumMessage = sequelize.define('forum_message', {
   text: {type: DataTypes.STRING, allowNull: false},
   is_removed: {type: DataTypes.BOOLEAN, allowNull: false},
   answer_to: {type: DataTypes.INTEGER},
+  answer_to_account: {type: DataTypes.INTEGER},
 })
 
 const ForumTrackedTheme = sequelize.define('forum_tracked_theme', {
