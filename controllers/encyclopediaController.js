@@ -1,4 +1,4 @@
-const {EncyclopediaPart, Part, ContentPart, Article} = require('../models/models')
+const {EncyclopediaPart, Article} = require('../models/models')
 const {EncyclopediaPart_RelationshipType} = require('../models/constants')
 const ApiError = require('../error/ApiError')
 const stemmer = require('../utils/stemming')
@@ -103,7 +103,6 @@ class EncyclopediaController {
   }
 
   async getAll(req, res) {
-    //const muscles = await Muscle.findAll()
     return res.json({message: 'Все ок'})
   }
 
@@ -124,67 +123,6 @@ function validatePart(part) {
   if (!part || part.article_id || part.article_id.length === 0) return "article_id"
 
   return undefined
-}
-
-async function getPartById(id) {
-  let mainPart = await Part.findOne({where: {id}})
-
-  const parts = await ContentPart.findAll({where: {parent: mainPart.id}})
-  const contentPart = await ContentPart.findOne({where: {child: id}})
-
-  const partList = []
-
-  for (let i = 0; i < parts.length; i++) {
-    console.log("part child : " + parts[i].child)
-    let part = await Part.findOne({where: {id: parts[i].child}});
-
-    if (!part) continue
-    part = part.toJSON()
-
-    delete part.updatedAt
-    delete part.createdAt
-
-    part.parent_id = id
-
-    if (part.is_article) {
-      partList.push(part)
-    } else {
-      partList.push(await getPartById(part.id))
-    }
-  }
-
-  mainPart = mainPart.toJSON()
-
-  mainPart.parent_id = contentPart ? contentPart.parent : 1
-
-  mainPart.parts = partList
-
-  delete mainPart.updatedAt
-  delete mainPart.createdAt
-
-  return mainPart
-}
-
-async function getMainParts() {
-  let mainPart = await Part.findOne({where: {id: 1}})
-
-  const parts = await ContentPart.findAll({where: {parent: mainPart.id}})
-
-  const partList = []
-
-  for (let i = 0; i < parts.length; i++) {
-    let part = await Part.findOne({where: {id: parts[i].child}});
-
-    if (!part) continue
-
-    part = part.toJSON()
-    delete part.updatedAt
-    delete part.createdAt
-
-    partList.push(part)
-  }
-
-  return partList
 }
 
 module.exports = new EncyclopediaController()

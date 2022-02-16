@@ -11,12 +11,9 @@ class PartController {
 
         if (TextUtils.isEmpty(name)) { return next(ApiError.REQUIRED_FIELD_EMPTY('name')) }
 
-        const part = await ForumPart.create({name, icon_url, group_id});
+        const part = await ForumPart.create({name, icon_url, forumGroupId: group_id});
 
-        return res.json({
-            success: true,
-            part
-        })
+        return res.json(part)
     }
 
     async update(req, res, next) {
@@ -31,16 +28,13 @@ class PartController {
         }
         else if (TextUtils.isEmpty(name)) name = part.name
         else if (TextUtils.isEmpty(icon_url)) icon_url = part.icon_url
-        else if (TextUtils.isEmpty(group_id)) group_id = part.group_id
+        else if (TextUtils.isEmpty(group_id)) group_id = part.forumGroupId
 
-        await ForumPart.update({name, icon_url, group_id}, {where: {id}});
+        await ForumPart.update({name, icon_url, forumGroupId: group_id}, {where: {id}});
 
         part = await ForumPart.findOne({where: {id}});
 
-        return res.json({
-            success: true,
-            part
-        })
+        return res.json(part)
     }
 
     async remove(req, res, next) {
@@ -61,24 +55,11 @@ class PartController {
         })
     }
 
-    async getOne(req, res, next) {
-        const {id} = req.params
+    async getAll(req, res, next) {
+        let parts = await ForumPart.findAll();
 
-        if (TextUtils.isEmpty(id)) { return next(ApiError.REQUIRED_FIELD_EMPTY('id')) }
-
-        let part = await ForumPart.findOne({where : {id}});
-
-        if (!part) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('ForumPart'))
-
-        let themes = await ForumTheme.findAll({where: {part_id: part.id.toString()}})
-        if (!themes) themes = []
-        part = part.toJSON()
-        part.themes = themes
-
-        return res.json(part)
+        return res.json(parts)
     }
-
-
 
 }
 

@@ -13,10 +13,7 @@ class GroupController {
 
         const group = await ForumGroup.create({name});
 
-        return res.json({
-            success: true,
-            group
-        })
+        return res.json(group)
     }
 
     async update(req, res, next) {
@@ -28,10 +25,7 @@ class GroupController {
         await ForumGroup.update({name}, {where: {id}});
         const group = await ForumGroup.findOne({where: {id}});
 
-        return res.json({
-            success: true,
-            group
-        })
+        return res.json(group)
     }
 
     async remove(req, res, next) {
@@ -54,15 +48,6 @@ class GroupController {
 
     async getAll(req, res, next) {
         let groups = await ForumGroup.findAll();
-
-        if (!groups) groups = []
-
-        for (let i = 0; i < groups.length; i ++) {
-            const parts = await ForumPart.findAll({where: {group_id: groups[i].id.toString()}})
-
-            groups[i] = groups[i].toJSON()
-            groups[i].parts = parts
-        }
 
         return res.json(groups)
     }

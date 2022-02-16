@@ -1,4 +1,3 @@
-const {Part, ContentPart} = require('../models/models')
 const ApiError = require('../error/ApiError')
 const stemmer = require('../utils/stemming')
 const {FavoriteArticle, Account, FavoritePart, Article} = require("../models/models");

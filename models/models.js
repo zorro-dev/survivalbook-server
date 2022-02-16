@@ -11,6 +11,15 @@ const User = sequelize.define('user', {
   role: {type: DataTypes.STRING, defaultValue: UserRole.User},
 })
 
+
+
+
+
+
+
+
+
+
 const defaultAccountAttributes = {}
 const defaultAccountRights = []
 
@@ -64,13 +73,6 @@ const Article = sequelize.define('article', {
   version: {type: DataTypes.INTEGER, allowNull: false}
 })
 
-const ContentPart = sequelize.define('content_part', {
-  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  parent: {type: DataTypes.INTEGER, allowNull: false},
-  child: {type: DataTypes.INTEGER},
-})
-
-
 const ForumGroup = sequelize.define('forum_group', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, allowNull: false},
@@ -78,38 +80,28 @@ const ForumGroup = sequelize.define('forum_group', {
 
 const ForumPart = sequelize.define('forum_part', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  name: {type: DataTypes.STRING, allowNull: false},
+  name: {type: DataTypes.STRING, allowNull: false, defaultValue: "Название раздела"},
   icon_url: {type: DataTypes.STRING},
-  group_id: {type: DataTypes.STRING},
 })
 
 const ForumTheme = sequelize.define('forum_theme', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, allowNull: false},
-  part_id: {type: DataTypes.STRING},
 })
 
 const ForumMessage = sequelize.define('forum_message', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  user_id: {type: DataTypes.STRING, allowNull: false},
-  theme_id: {type: DataTypes.STRING, allowNull: false},
   text: {type: DataTypes.STRING, allowNull: false},
   is_removed: {type: DataTypes.BOOLEAN, allowNull: false},
-  answer_to: {type: DataTypes.STRING},
-  answer_to_user: {type: DataTypes.STRING},
+  answer_to: {type: DataTypes.INTEGER},
 })
 
-const TrackedTheme = sequelize.define('tracked_theme', {
+const ForumTrackedTheme = sequelize.define('forum_tracked_theme', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  user_id: {type: DataTypes.STRING, allowNull: false},
-  theme_id: {type: DataTypes.STRING, allowNull: false},
 })
 
-const LastReadMessage = sequelize.define('last_read_message', {
+const ForumLastReadMessage = sequelize.define('forum_last_read_message', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  user_id: {type: DataTypes.STRING, allowNull: false},
-  theme_id: {type: DataTypes.STRING, allowNull: false},
-  message_id: {type: DataTypes.STRING, allowNull: false},
 })
 
 
@@ -118,20 +110,32 @@ Account.hasMany(FavoritePart)
 FavoriteArticle.belongsTo(FavoritePart)
 FavoriteArticle.belongsTo(Article)
 
+ForumGroup.hasMany(ForumPart)
+ForumPart.hasMany(ForumTheme)
+
+ForumMessage.belongsTo(Account)
+ForumMessage.belongsTo(ForumTheme)
+
+ForumTrackedTheme.belongsTo(Account)
+ForumTrackedTheme.belongsTo(ForumTheme)
+
+ForumLastReadMessage.belongsTo(Account)
+ForumLastReadMessage.belongsTo(ForumTheme)
+ForumLastReadMessage.belongsTo(ForumMessage)
+
 module.exports = {
   User,
-  Part: EncyclopediaPart,
-  Article,
-  ContentPart,
-  FavoritePart,
-  FavoriteArticle,
+
   ForumGroup,
   ForumPart,
   ForumTheme,
   ForumMessage,
-  TrackedTheme,
-  LastReadMessage,
+  ForumTrackedTheme,
+  ForumLastReadMessage,
 
+  Article,
+  FavoritePart,
+  FavoriteArticle,
   Account,
   EncyclopediaPart,
 }
