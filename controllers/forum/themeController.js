@@ -78,7 +78,7 @@ class ThemeController {
 
     if (!theme) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('ForumTheme'))
 
-    const chunk_size = 10;
+    const chunk_size = 100;
 
     const messageResponse = await ForumMessage.findAndCountAll({
       where: {forumThemeId : theme_id},
