@@ -81,7 +81,7 @@ class ThemeController {
     const messageResponse = await ForumMessage.findAndCountAll({
       where: {forumThemeId : theme_id},
       offset: chunk_size * Number.parseInt(chunk) - chunk_size,
-      limit: 10
+      limit: chunk_size
     })
 
     let messages = messageResponse.rows
