@@ -175,9 +175,7 @@ class ThemeController {
     });
 
     if (index.getSocketIo().sockets) {
-      index.getSocketIo().sockets.emit('new message', {
-        message
-      })
+      index.getSocketIo().sockets.emit('new message', message)
     } else {
       console.log("socket null")
     }
