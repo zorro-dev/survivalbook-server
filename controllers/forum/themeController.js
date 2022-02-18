@@ -174,8 +174,8 @@ class ThemeController {
       forumThemeId
     });
 
-    if (index.getSocketIo().sockets[0]) {
-      index.getSocketIo().sockets[0].broadcast.emit('new message', {
+    if (index.getSocketIo().sockets) {
+      index.getSocketIo().sockets.emit('new message', {
         message
       })
     } else {
