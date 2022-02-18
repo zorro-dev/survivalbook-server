@@ -7,6 +7,7 @@ const {ForumLastReadMessage} = require("../../models/models");
 const {ForumMessage} = require("../../models/models");
 const {Op} = require("sequelize");
 const io = require('socket.io')(server);
+const {server} = require("../../index")
 
 let mSocket;
 
