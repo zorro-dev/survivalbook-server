@@ -4,9 +4,6 @@ const {ForumTheme} = require("../../models/models");
 const TextUtils = require('../../utils/TextUtils')
 const {Account} = require("../../models/models");
 const {ForumLastReadMessage} = require("../../models/models");
-const {User} = require("../../models/models");
-const {LastReadMessage} = require("../../models/models");
-const {UserRole} = require("../../models/constants");
 const {ForumMessage} = require("../../models/models");
 const {Op} = require("sequelize");
 
