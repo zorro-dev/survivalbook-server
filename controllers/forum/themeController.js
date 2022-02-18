@@ -178,6 +178,8 @@ class ThemeController {
       index.getSocketIo().socket.broadcast.emit('new message', {
         message
       })
+    } else {
+      console.log("socket null")
     }
 
     return res.json(message)
