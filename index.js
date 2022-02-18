@@ -46,10 +46,10 @@ io.on('connection', (socket) => {
     socket.on('new message', (data) => {
         // we tell the client to execute 'new message'
         console.log("new message received")
-        // socket.broadcast.emit('new message', {
-        //   username: socket.username,
-        //   message: data
-        // });
+        socket.broadcast.emit('new message', {
+          username: socket.username,
+          message: data
+        });
     });
     //
     // // when the client emits 'add user', this listens and executes
@@ -97,3 +97,7 @@ io.on('connection', (socket) => {
     //   }
     // });
 });
+
+module.exports.getSocketIo = function getSocketIo() {
+    return io;
+}

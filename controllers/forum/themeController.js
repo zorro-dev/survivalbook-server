@@ -6,8 +6,7 @@ const {Account} = require("../../models/models");
 const {ForumLastReadMessage} = require("../../models/models");
 const {ForumMessage} = require("../../models/models");
 const {Op} = require("sequelize");
-
-let mSocket;
+const index = require('../../index.js')
 
 class ThemeController {
 
@@ -175,14 +174,10 @@ class ThemeController {
       forumThemeId
     });
 
-    console.log("отправление сообщения")
-
-    if (mSocket) {
-      mSocket.broadcast.emit('new message', {
-        message: message.toJSON()
-      });
-    } else {
-      console.log("socket null")
+    if (index.getSocketIo().socket) {
+      index.getSocketIo().socket.broadcast.emit('new message', {
+        message
+      })
     }
 
     return res.json(message)
