@@ -6,7 +6,8 @@ const {Account} = require("../../models/models");
 const {ForumLastReadMessage} = require("../../models/models");
 const {ForumMessage} = require("../../models/models");
 const {Op} = require("sequelize");
-const {io} = require("../../index")
+const {server} = require("../../index")
+const io = require('socket.io')(server);
 
 let numUsers = 0;
 
@@ -18,13 +19,14 @@ io.on('connection', (socket) => {
   mSocket = socket;
 
   // // when the client emits 'new message', this listens and executes
-  // socket.on('new message', (data) => {
-  //   // we tell the client to execute 'new message'
-  //   socket.broadcast.emit('new message', {
-  //     username: socket.username,
-  //     message: data
-  //   });
-  // });
+  socket.on('new message', (data) => {
+    // we tell the client to execute 'new message'
+    console.log("new message received")
+    // socket.broadcast.emit('new message', {
+    //   username: socket.username,
+    //   message: data
+    // });
+  });
   //
   // // when the client emits 'add user', this listens and executes
   // socket.on('add user', (username) => {

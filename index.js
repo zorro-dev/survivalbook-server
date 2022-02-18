@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const path = require('path');
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
 
 const PORT = process.env.PORT || 5000
 
@@ -35,6 +34,4 @@ const start = async () => {
 
 start()
 
-module.exports = {
-    io
-}
+module.exports = {server}
