@@ -165,6 +165,8 @@ class ThemeController {
       if (answerMessage) answer_to_account = answerMessage.toJSON().accountId
     }
 
+    const account = await Account.findOne({where: {id: accountId}})
+
     const message = await ForumMessage.create({
       accountId,
       text,
@@ -175,7 +177,10 @@ class ThemeController {
     });
 
     if (index.getSocketIo().sockets) {
-      index.getSocketIo().sockets.emit('new message', message)
+      index.getSocketIo().sockets.emit('new message', {
+        message,
+        account
+      })
     } else {
       console.log("socket null")
     }
