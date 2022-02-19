@@ -129,24 +129,99 @@ class ThemeController {
       messages,
       accounts,
     })
+  }
 
-    // if (req.user) {
-    //   const user_id = req.user.id.toString()
-    //   const lastReadMessage = await LastReadMessage.findOne({where: {user_id, theme_id}})
-    //
-    //   let last_read_message_id = 0
-    //   if (lastReadMessage) last_read_message_id = Number.parseInt(lastReadMessage.message_id)
-    //
-    //   return res.json({
-    //     messages,
-    //     accounts,
-    //     //last_read_message_id
-    //   })
-    // } else {
-    //   return res.json({
-    //     list
-    //   })
-    // }
+  async syncMessages(req, res, next) {
+    let {chunk, theme_id, local_messages} = req.body
+
+    if (TextUtils.isEmpty(theme_id)) return next(ApiError.REQUIRED_FIELD_EMPTY('theme_id'))
+    if (TextUtils.isEmpty(chunk)) return next(ApiError.REQUIRED_FIELD_EMPTY('chunk'))
+    if (TextUtils.isEmpty(local_messages)) return next(ApiError.REQUIRED_FIELD_EMPTY('local_messages'))
+
+    let theme = await ForumTheme.findOne({where: {id: theme_id}});
+
+    if (!theme) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('ForumTheme'))
+
+    const chunk_size = 10;
+
+    const messageResponse = await ForumMessage.findAndCountAll({
+      where: {forumThemeId : theme_id},
+      offset: chunk_size * Number.parseInt(chunk) - chunk_size,
+      limit: chunk_size
+    })
+
+    let messages = messageResponse.rows
+
+    const accountIds = []
+    const answerToMessageIds = []
+
+    messages.map((m) => {
+      const message = m.toJSON()
+      accountIds.push(message.accountId)
+      if (message.answer_to) {
+        answerToMessageIds.push(message.answer_to)
+      }
+    })
+
+    const accountsResponse = await Account.findAll({
+      where: {
+        id: {
+          [Op.or]: accountIds
+        }
+      },
+      attributes: { exclude: ['sign_in_providers'] }
+    })
+
+    const answerMessagesResponse = await ForumMessage.findAll({
+      where: {
+        id: {
+          [Op.or]: answerToMessageIds
+        }
+      }
+    })
+
+    const answerMessages = JSON.parse(JSON.stringify(answerMessagesResponse))
+    const accounts = JSON.parse(JSON.stringify(accountsResponse))
+
+    answerMessages.map(message => messages.push(message))
+
+    messages = messages.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        JSON.stringify(t) === JSON.stringify(value)
+      ))
+    )
+
+    local_messages.map(localItem => {
+      const id = localItem.id
+      const updatedAt = Date.parse(localItem.updatedAt)
+
+      console.log("id : " + id + " updatedAt : " + updatedAt)
+    })
+
+    for (let i = 0; i < messages.length; i ++) {
+      const serverItem = messages[i].toJSON()
+      const serverUpdatedAt = Date.parse(serverItem.updatedAt)
+      console.log("id : " + serverItem.id + " updatedAt : " + serverUpdatedAt)
+
+      local_messages.map(localItem => {
+        const localUpdatedAt = Date.parse(localItem.updatedAt)
+
+        if (localItem.id === serverItem.id) {
+          if (localUpdatedAt >= serverUpdatedAt) {
+            console.log("splice")
+            messages.splice(i, 1)
+            i --
+          }
+        }
+      })
+    }
+
+    messages.map((m) => console.log(m.toJSON().id))
+
+    return res.json({
+      messages,
+      accounts,
+    })
   }
 
   async sendMessage(req, res, next) {
