@@ -136,7 +136,7 @@ class ThemeController {
 
     if (TextUtils.isEmpty(theme_id)) return next(ApiError.REQUIRED_FIELD_EMPTY('theme_id'))
     if (TextUtils.isEmpty(chunk)) return next(ApiError.REQUIRED_FIELD_EMPTY('chunk'))
-    if (TextUtils.isEmpty(local_messages)) return next(ApiError.REQUIRED_FIELD_EMPTY('local_messages'))
+    if (!local_messages) return next(ApiError.REQUIRED_FIELD_EMPTY('local_messages'))
 
     let theme = await ForumTheme.findOne({where: {id: theme_id}});
 
