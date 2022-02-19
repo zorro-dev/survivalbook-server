@@ -143,10 +143,15 @@ class ThemeController {
     if (!theme) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('ForumTheme'))
 
     const chunk_size = 10;
+    const offset = chunk_size * chunk - chunk_size
+
+    console.log("chunk : " + chunk)
+    console.log("offset : " + offset)
+    console.log("chunk_size : " + chunk_size)
 
     const messageResponse = await ForumMessage.findAndCountAll({
       where: {forumThemeId : theme_id},
-      offset: chunk_size * chunk - chunk_size,
+      offset: offset,
       limit: chunk_size
     })
 
