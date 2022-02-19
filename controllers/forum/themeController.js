@@ -199,7 +199,7 @@ class ThemeController {
     })
 
     for (let i = 0; i < messages.length; i ++) {
-      const serverItem = messages[i].toJSON()
+      const serverItem = messages[i]
       const serverUpdatedAt = Date.parse(serverItem.updatedAt)
       console.log("id : " + serverItem.id + " updatedAt : " + serverUpdatedAt)
 
