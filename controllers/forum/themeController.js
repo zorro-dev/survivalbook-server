@@ -249,7 +249,7 @@ class ThemeController {
     //   })
     // }
     //
-    // const lastUpdateDate = new Date(last_update_unix_time)
+    const lastUpdateDate = new Date(last_update_unix_time)
     // const trackedThemes = await ForumTrackedTheme.findAll({where: {accountId}})
     // const trackedThemeIds = []
     //
