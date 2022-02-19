@@ -299,6 +299,9 @@ class ThemeController {
       ))
     )
 
+    console.log("messages: " + messages.length)
+    console.log("accounts: " + accounts.length)
+
     return res.json({
       messages,
       accounts
