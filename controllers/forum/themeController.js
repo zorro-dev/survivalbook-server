@@ -157,7 +157,7 @@ class ThemeController {
 
     let messages = messageResponse.rows
 
-    console.log("messages :" + messages.length)
+    console.log("messages : " + messages.length)
 
     const accountIds = []
     const answerToMessageIds = []
@@ -188,6 +188,9 @@ class ThemeController {
     })
 
     const answerMessages = JSON.parse(JSON.stringify(answerMessagesResponse))
+
+    console.log("answerMessages : " + answerMessages)
+
     const accounts = JSON.parse(JSON.stringify(accountsResponse))
 
     answerMessages.map(message => messages.push(message))
@@ -202,13 +205,13 @@ class ThemeController {
       const id = localItem.id
       const updatedAt = Date.parse(localItem.updatedAt)
 
-      console.log("id : " + id + " updatedAt : " + updatedAt)
+      //console.log("id : " + id + " updatedAt : " + updatedAt)
     })
 
     for (let i = 0; i < messages.length; i ++) {
       const serverItem = messages[i]
       const serverUpdatedAt = Date.parse(serverItem.updatedAt)
-      console.log("id : " + serverItem.id + " updatedAt : " + serverUpdatedAt)
+      //console.log("id : " + serverItem.id + " updatedAt : " + serverUpdatedAt)
 
       local_messages.map(localItem => {
         const localUpdatedAt = Date.parse(localItem.updatedAt)
