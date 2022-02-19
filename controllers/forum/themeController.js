@@ -237,8 +237,6 @@ class ThemeController {
   async syncThemeMessages(req, res, next) {
     let {theme_id, last_read_message, local_messages} = req.body
 
-    console.log("last_read_message : " + last_read_message)
-
     if (theme_id === undefined) return next(ApiError.REQUIRED_FIELD_EMPTY('theme_id'))
     if (last_read_message === undefined) return next(ApiError.REQUIRED_FIELD_EMPTY('last_read_message'))
     if (!local_messages) return next(ApiError.REQUIRED_FIELD_EMPTY('local_messages'))
@@ -254,8 +252,6 @@ class ThemeController {
     let messages = await ForumMessage.findAll({
       where: {forumThemeId: theme_id, id: {[Op.gte]: last_read_message}}
     })
-
-    console.log("messages : " + messages.length)
 
     const accountIds = []
     const answerToMessageIds = []
@@ -287,7 +283,6 @@ class ThemeController {
       })
 
       const answerMessages = JSON.parse(JSON.stringify(answerMessagesResponse))
-      console.log("answerMessages : " + answerMessages.length)
       answerMessages.map(message => messages.push(message))
     }
 
@@ -308,7 +303,6 @@ class ThemeController {
 
         if (localItem.id === serverItem.id) {
           if (localUpdatedAt >= serverUpdatedAt) {
-            console.log("splice")
             messages.splice(i, 1)
             i --
           }
