@@ -235,25 +235,25 @@ class ThemeController {
     })
   }
 
-  async syncTrackedThemeByDate(req, res, next) {
+  async syncMessagesByDate(req, res, next) {
     let {last_update_unix_time} = req.body
 
-    if (last_update_unix_time === undefined) return next(ApiError.REQUIRED_FIELD_EMPTY('theme_id'))
+    if (last_update_unix_time === undefined) return next(ApiError.REQUIRED_FIELD_EMPTY('last_update_unix_time'))
 
-    const accountId = req.auth.id
-
-    if (!accountId) {
-      return res.json({
-        messages: [],
-        accounts: [],
-      })
-    }
-
-    const lastUpdateDate = new Date(last_update_unix_time)
-    const trackedThemes = await ForumTrackedTheme.findAll({where: {accountId}})
-    const trackedThemeIds = []
-
-    trackedThemes.map(item => trackedThemeIds.push(item.toJSON().forumThemeId))
+    // const accountId = req.auth.id
+    //
+    // if (!accountId) {
+    //   return res.json({
+    //     messages: [],
+    //     accounts: [],
+    //   })
+    // }
+    //
+    // const lastUpdateDate = new Date(last_update_unix_time)
+    // const trackedThemes = await ForumTrackedTheme.findAll({where: {accountId}})
+    // const trackedThemeIds = []
+    //
+    // trackedThemes.map(item => trackedThemeIds.push(item.toJSON().forumThemeId))
 
     let messages = await ForumMessage.findAll({
       where: {
