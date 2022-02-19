@@ -157,6 +157,8 @@ class ThemeController {
 
     let messages = messageResponse.rows
 
+    console.log("messages :" + messages.length)
+
     const accountIds = []
     const answerToMessageIds = []
 
