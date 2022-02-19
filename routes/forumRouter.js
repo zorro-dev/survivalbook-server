@@ -25,6 +25,7 @@ router.get("/theme/getAll", themeController.getAll)
 router.post("/sendMessage", authMiddleware, themeController.sendMessage)
 router.post("/removeMessage", authMiddleware, themeController.removeMessage)
 router.get("/getMessages", themeController.getMessages)
+router.get("/getLastReadMessages", authMiddleware, themeController.getLastReadMessages)
 
 router.post("/tracked/changeState", authMiddleware, trackedController.changeState)
 router.get("/tracked/getAll", authMiddleware, trackedController.getAll)

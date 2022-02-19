@@ -232,6 +232,15 @@ class ThemeController {
 
     return res.json(lastReadMessage)
   }
+
+  async getLastReadMessages(req, res, next) {
+    const accountId = req.auth.id
+
+    let lastReadMessages = await ForumLastReadMessage.findAll({where: {accountId}});
+
+    return res.json(lastReadMessages)
+  }
+
 }
 
 module.exports = new ThemeController()
