@@ -25,7 +25,7 @@ class ThemeController {
     if (!theme) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('ForumTheme'))
 
     if (!trackedTheme) {
-      await ForumTrackedTheme.create({accountId, forumThemeId});
+      const trackedTheme = await ForumTrackedTheme.create({accountId, forumThemeId});
       return res.json({
         is_tracked: true,
         trackedTheme
