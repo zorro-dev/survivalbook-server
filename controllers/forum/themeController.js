@@ -146,7 +146,7 @@ class ThemeController {
 
     const messageResponse = await ForumMessage.findAndCountAll({
       where: {forumThemeId : theme_id},
-      offset: chunk_size * Number.parseInt(chunk) - chunk_size,
+      offset: chunk_size * chunk - chunk_size,
       limit: chunk_size
     })
 
@@ -216,7 +216,7 @@ class ThemeController {
       })
     }
 
-    messages.map((m) => console.log(m.toJSON().id))
+    messages.map((m) => console.log(m.id))
 
     return res.json({
       messages,
