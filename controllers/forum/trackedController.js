@@ -28,7 +28,7 @@ class ThemeController {
       await ForumTrackedTheme.create({accountId, forumThemeId});
       return res.json({
         is_tracked: true,
-        theme
+        trackedTheme
       })
     } else {
       const trackedTheme = await ForumTrackedTheme.findOne({where: {accountId, forumThemeId}});
@@ -36,7 +36,7 @@ class ThemeController {
 
       return res.json({
         is_tracked: false,
-        theme
+        trackedTheme
       })
     }
   }
