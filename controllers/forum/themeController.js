@@ -234,6 +234,94 @@ class ThemeController {
     })
   }
 
+  async syncThemeMessages(req, res, next) {
+    let {theme_id, last_read_message, local_messages} = req.body
+
+    console.log("last_read_message : " + last_read_message)
+
+    if (theme_id === undefined) return next(ApiError.REQUIRED_FIELD_EMPTY('theme_id'))
+    if (last_read_message === undefined) return next(ApiError.REQUIRED_FIELD_EMPTY('last_read_message'))
+    if (!local_messages) return next(ApiError.REQUIRED_FIELD_EMPTY('local_messages'))
+
+    let theme = await ForumTheme.findOne({where: {id: theme_id}});
+
+    if (!theme) return next(ApiError.REQUIRED_OBJECT_NOT_FOUND('ForumTheme'))
+
+    const chunk_size = 10
+
+    last_read_message = last_read_message - chunk_size
+
+    let messages = await ForumMessage.findAll({
+      where: {forumThemeId: theme_id, id: {[Op.gte]: last_read_message}}
+    })
+
+    console.log("messages : " + messages.length)
+
+    const accountIds = []
+    const answerToMessageIds = []
+
+    messages.map((m) => {
+      const message = m.toJSON()
+      accountIds.push(message.accountId)
+      if (message.answer_to) {
+        answerToMessageIds.push(message.answer_to)
+      }
+    })
+
+    const accountsResponse = await Account.findAll({
+      where: {
+        id: {
+          [Op.or]: accountIds
+        }
+      },
+      attributes: { exclude: ['sign_in_providers'] }
+    })
+
+    if (answerToMessageIds.length !== 0) {
+      const answerMessagesResponse = await ForumMessage.findAll({
+        where: {
+          id: {
+            [Op.or]: answerToMessageIds
+          }
+        }
+      })
+
+      const answerMessages = JSON.parse(JSON.stringify(answerMessagesResponse))
+      console.log("answerMessages : " + answerMessages.length)
+      answerMessages.map(message => messages.push(message))
+    }
+
+    const accounts = JSON.parse(JSON.stringify(accountsResponse))
+
+    messages = messages.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        JSON.stringify(t) === JSON.stringify(value)
+      ))
+    )
+
+    for (let i = 0; i < messages.length; i ++) {
+      const serverItem = messages[i]
+      const serverUpdatedAt = Date.parse(serverItem.updatedAt)
+
+      local_messages.map(localItem => {
+        const localUpdatedAt = Date.parse(localItem.updatedAt)
+
+        if (localItem.id === serverItem.id) {
+          if (localUpdatedAt >= serverUpdatedAt) {
+            console.log("splice")
+            messages.splice(i, 1)
+            i --
+          }
+        }
+      })
+    }
+
+    return res.json({
+      messages,
+      accounts,
+    })
+  }
+
   async sendMessage(req, res, next) {
     const {theme_id, text, answer_to} = req.body
 
