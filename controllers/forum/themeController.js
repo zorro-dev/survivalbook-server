@@ -179,21 +179,21 @@ class ThemeController {
       attributes: { exclude: ['sign_in_providers'] }
     })
 
-    const answerMessagesResponse = await ForumMessage.findAll({
-      where: {
-        id: {
-          [Op.or]: answerToMessageIds
+    if (answerToMessageIds.length !== 0) {
+      const answerMessagesResponse = await ForumMessage.findAll({
+        where: {
+          id: {
+            [Op.or]: answerToMessageIds
+          }
         }
-      }
-    })
+      })
 
-    const answerMessages = JSON.parse(JSON.stringify(answerMessagesResponse))
-
-    console.log("answerMessages : " + answerMessages)
+      const answerMessages = JSON.parse(JSON.stringify(answerMessagesResponse))
+      console.log("answerMessages : " + answerMessages.length)
+      answerMessages.map(message => messages.push(message))
+    }
 
     const accounts = JSON.parse(JSON.stringify(accountsResponse))
-
-    answerMessages.map(message => messages.push(message))
 
     messages = messages.filter((value, index, self) =>
       index === self.findIndex((t) => (
