@@ -7,6 +7,7 @@ const {ForumLastReadMessage} = require("../../models/models");
 const {ForumMessage} = require("../../models/models");
 const {Op} = require("sequelize");
 const index = require('../../index.js')
+const {ForumTrackedTheme} = require("../../models/models");
 
 class ThemeController {
 
@@ -79,7 +80,7 @@ class ThemeController {
     const chunk_size = 100;
 
     const messageResponse = await ForumMessage.findAndCountAll({
-      where: {forumThemeId : theme_id},
+      where: {forumThemeId: theme_id},
       offset: chunk_size * Number.parseInt(chunk) - chunk_size,
       limit: chunk_size
     })
@@ -103,7 +104,7 @@ class ThemeController {
           [Op.or]: accountIds
         }
       },
-      attributes: { exclude: ['sign_in_providers'] }
+      attributes: {exclude: ['sign_in_providers']}
     })
 
     const answerMessagesResponse = await ForumMessage.findAll({
@@ -150,7 +151,7 @@ class ThemeController {
     console.log("chunk_size : " + chunk_size)
 
     const messageResponse = await ForumMessage.findAndCountAll({
-      where: {forumThemeId : theme_id},
+      where: {forumThemeId: theme_id},
       offset: offset,
       limit: chunk_size
     })
@@ -176,7 +177,7 @@ class ThemeController {
           [Op.or]: accountIds
         }
       },
-      attributes: { exclude: ['sign_in_providers'] }
+      attributes: {exclude: ['sign_in_providers']}
     })
 
     if (answerToMessageIds.length !== 0) {
@@ -208,7 +209,7 @@ class ThemeController {
       //console.log("id : " + id + " updatedAt : " + updatedAt)
     })
 
-    for (let i = 0; i < messages.length; i ++) {
+    for (let i = 0; i < messages.length; i++) {
       const serverItem = messages[i]
       const serverUpdatedAt = Date.parse(serverItem.updatedAt)
       //console.log("id : " + serverItem.id + " updatedAt : " + serverUpdatedAt)
@@ -220,7 +221,7 @@ class ThemeController {
           if (localUpdatedAt >= serverUpdatedAt) {
             console.log("splice")
             messages.splice(i, 1)
-            i --
+            i--
           }
         }
       })
@@ -231,6 +232,76 @@ class ThemeController {
     return res.json({
       messages,
       accounts,
+    })
+  }
+
+  async syncTrackedThemeByDate(req, res, next) {
+    let {last_update_unix_time} = req.body
+
+    if (last_update_unix_time === undefined) return next(ApiError.REQUIRED_FIELD_EMPTY('theme_id'))
+
+    const accountId = req.auth.id
+
+    if (!accountId) {
+      return res.json({
+        messages: [],
+        accounts: [],
+      })
+    }
+
+    const lastUpdateDate = new Date(last_update_unix_time)
+    const trackedThemes = await ForumTrackedTheme.findAll({where: {accountId}})
+    const trackedThemeIds = []
+
+    trackedThemes.map(item => trackedThemeIds.push(item.toJSON().forumThemeId))
+
+    let messages = await ForumMessage.findAll({
+      where: {
+        updatedAt: {[Op.gt]: lastUpdateDate},
+        //forumThemeId: {[Op.or]: trackedThemeIds}
+      }
+    })
+
+    const accountIds = []
+    const answerToMessageIds = []
+
+    messages.map((m) => {
+      const message = m.toJSON()
+      accountIds.push(message.accountId)
+      if (message.answer_to) {
+        answerToMessageIds.push(message.answer_to)
+      }
+    })
+
+    const accountsResponse = await Account.findAll({
+      where: {
+        id: {[Op.or]: accountIds}
+      },
+      attributes: {exclude: ['sign_in_providers']}
+    })
+
+    if (answerToMessageIds.length !== 0) {
+      const answerMessagesResponse = await ForumMessage.findAll({
+        where: {
+          id: {[Op.or]: answerToMessageIds}
+        }
+      })
+
+      const answerMessages = JSON.parse(JSON.stringify(answerMessagesResponse))
+      answerMessages.map(message => messages.push(message))
+    }
+
+    const accounts = JSON.parse(JSON.stringify(accountsResponse))
+
+    messages = messages.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        JSON.stringify(t) === JSON.stringify(value)
+      ))
+    )
+
+    return res.json({
+      messages,
+      accounts
     })
   }
 
@@ -270,7 +341,7 @@ class ThemeController {
           [Op.or]: accountIds
         }
       },
-      attributes: { exclude: ['sign_in_providers'] }
+      attributes: {exclude: ['sign_in_providers']}
     })
 
     if (answerToMessageIds.length !== 0) {
@@ -294,7 +365,7 @@ class ThemeController {
       ))
     )
 
-    for (let i = 0; i < messages.length; i ++) {
+    for (let i = 0; i < messages.length; i++) {
       const serverItem = messages[i]
       const serverUpdatedAt = Date.parse(serverItem.updatedAt)
 
@@ -304,7 +375,7 @@ class ThemeController {
         if (localItem.id === serverItem.id) {
           if (localUpdatedAt >= serverUpdatedAt) {
             messages.splice(i, 1)
-            i --
+            i--
           }
         }
       })
