@@ -28,7 +28,7 @@ router.post("/syncMessages", themeController.syncMessages)
 router.post("/syncMessagesByDate", themeController.syncMessagesByDate)
 router.post("/syncThemeMessages", themeController.syncThemeMessages)
 router.get("/getMessages", themeController.getMessages)
-router.get("/getLastReadMessages", authMiddleware, themeController.getLastReadMessages)
+router.post("/syncLastReadMessages", authMiddleware, themeController.syncLastReadMessages)
 
 router.post("/tracked/changeState", authMiddleware, trackedController.changeState)
 router.get("/tracked/getAll", authMiddleware, trackedController.getAll)

@@ -474,10 +474,30 @@ class ThemeController {
     return res.json(lastReadMessage)
   }
 
-  async getLastReadMessages(req, res, next) {
+  async syncLastReadMessages(req, res, next) {
+    let {last_read_messages} = req.body
     const accountId = req.auth.id
 
+    if (!last_read_messages) last_read_messages = []
+
     let lastReadMessages = await ForumLastReadMessage.findAll({where: {accountId}});
+
+    for (let i = 0; i < last_read_messages.length; i ++) {
+      const localLrm = last_read_messages[i]
+      let serverLrm = lastReadMessages.find(item => {
+        return item.toJSON().forumThemeId === localLrm.forumThemeId
+      })
+
+      if (serverLrm) {
+        if (serverLrm.forumMessageId < localLrm.forumMessageId) {
+          await ForumLastReadMessage.update({forumMessageId: localLrm.forumMessageId}, {where: {id : serverLrm.id}})
+        }
+      } else {
+        await ForumLastReadMessage.create({accountId, forumThemeId: localLrm.forumThemeId, forumMessageId: localLrm.forumMessageId})
+      }
+    }
+
+    lastReadMessages = await ForumLastReadMessage.findAll({where: {accountId}});
 
     return res.json(lastReadMessages)
   }
