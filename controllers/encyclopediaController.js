@@ -83,6 +83,13 @@ class EncyclopediaController {
     return res.json(response)
   }
 
+  async getPartsMobile(req, res, next) {
+    const response = await EncyclopediaPart.findAll()
+    return res.json({
+      parts : response
+    })
+  }
+
   async search(req, res) {
     const {request} = req.body
 
