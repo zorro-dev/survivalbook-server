@@ -99,6 +99,31 @@ class ArticleController {
             // TODO статья не найдена
         }
     }
+
+    async getArticleAndroid(req, res) {
+        const {id} = req.params
+        const {part_id, user_id} = req.body
+
+        let article = await Article.findOne({where: {id: id}})
+
+        let favoriteArticle
+        if (part_id && user_id) {
+            favoriteArticle = await FavoriteArticle.findOne({where: {part_id, user_id, article_id: id}})
+        }
+
+        if (article) {
+            // return res.json({
+            //     success: true,
+            //     is_favorite: !!favoriteArticle,
+            //     data: article.toJSON()
+            // })
+            return res.json({
+                article
+            })
+        } else {
+            // TODO статья не найдена
+        }
+    }
 }
 
 function validatePart(part) {

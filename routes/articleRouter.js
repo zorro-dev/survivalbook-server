@@ -8,6 +8,7 @@ router.post("/create", checkRole(UserRole.Admin), articleController.createArticl
 router.post("/remove", checkRole(UserRole.Admin), articleController.removeArticle)
 router.post("/update", checkRole(UserRole.Admin), articleController.updateArticle)
 router.post("/:id", articleController.get)
+router.post("android/:id", articleController.getArticleAndroid)
 
 // router.get("/", encyclopediaController.getEncyclopedia)
 // router.get("/library", encyclopediaController.getLibrary)
