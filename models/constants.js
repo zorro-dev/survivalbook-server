@@ -1,9 +1,3 @@
-class UserRole {
-    static Visitor = "Visitor"
-    static User = "User"
-    static Admin = "Admin"
-}
-
 class SignInProvider {
     static custom  = "custom"
     static password = "password"

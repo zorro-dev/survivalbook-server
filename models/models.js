@@ -105,7 +105,6 @@ const ForumLastReadMessage = sequelize.define('forum_last_read_message', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
-
 Account.hasMany(FavoriteArticle)
 Account.hasMany(FavoritePart)
 FavoriteArticle.belongsTo(FavoritePart)
