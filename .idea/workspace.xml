@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="49ac1dda-fa75-431d-ba7b-df326627ea58" name="Default Changelist" comment="Добавлен запрос получения статья для Android" />
+    <list default="true" id="49ac1dda-fa75-431d-ba7b-df326627ea58" name="Default Changelist" comment="Добавлен запрос получения статья для Android">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,7 +24,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.build" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -38,6 +40,7 @@
       <workItem from="1649004761521" duration="219000" />
       <workItem from="1649005393358" duration="178000" />
       <workItem from="1649005579925" duration="1598000" />
+      <workItem from="1651441707112" duration="506000" />
     </task>
     <task id="LOCAL-00001" summary="Добавлен запрос получения статья для Android">
       <created>1649016468460</created>
@@ -62,9 +65,16 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавлен запрос получения статья для Android" />
     <option name="LAST_COMMIT_MESSAGE" value="Добавлен запрос получения статья для Android" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="142" y="6" key="SettingsEditor" timestamp="1651441781390">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="142" y="6" key="SettingsEditor/0.0.1280.720@0.0.1280.720" timestamp="1651441781390" />
   </component>
 </project>
