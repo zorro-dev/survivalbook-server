@@ -499,7 +499,7 @@ class ThemeController {
 
     lastReadMessages = await ForumLastReadMessage.findAll({where: {accountId}});
 
-    return res.json(lastReadMessages)
+    return res.json({lastReadMessages})
   }
 
 }

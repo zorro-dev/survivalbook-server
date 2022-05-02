@@ -19,13 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="49ac1dda-fa75-431d-ba7b-df326627ea58" name="Default Changelist" comment="Изменен ip бд">
+    <list default="true" id="49ac1dda-fa75-431d-ba7b-df326627ea58" name="Default Changelist" comment="Исправление возвращаемых объектов">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/forum/groupController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/groupController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/forum/partController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/partController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/forum/themeController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/themeController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/forum/trackedController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/trackedController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +61,7 @@
       <workItem from="1649005393358" duration="178000" />
       <workItem from="1649005579925" duration="1598000" />
       <workItem from="1651441707112" duration="4409000" />
-      <workItem from="1651488775616" duration="1049000" />
+      <workItem from="1651488775616" duration="3103000" />
     </task>
     <task id="LOCAL-00001" summary="Добавлен запрос получения статья для Android">
       <created>1649016468460</created>
@@ -95,7 +91,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651444138910</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Исправление возвращаемых объектов">
+      <created>1651490669015</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1651490669015</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,13 +119,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавлен запрос получения статья для Android" />
     <MESSAGE value="Изменен ip бд" />
-    <option name="LAST_COMMIT_MESSAGE" value="Изменен ip бд" />
+    <MESSAGE value="Исправление возвращаемых объектов" />
+    <option name="LAST_COMMIT_MESSAGE" value="Исправление возвращаемых объектов" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="93" y="93" width="1095" height="535" key="DiffContextDialog" timestamp="1651442519092">
+    <state x="94" y="15" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1651490637653">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="93" y="93" width="1095" height="535" key="DiffContextDialog/0.0.1280.720@0.0.1280.720" timestamp="1651442519092" />
+    <state x="94" y="15" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.720@0.0.1280.720" timestamp="1651490637653" />
+    <state x="93" y="93" width="1095" height="535" key="DiffContextDialog" timestamp="1651498559727">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="93" y="93" width="1095" height="535" key="DiffContextDialog/0.0.1280.720@0.0.1280.720" timestamp="1651498559727" />
     <state width="1257" height="175" key="GridCell.Tab.0.bottom" timestamp="1651488868868">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
@@ -143,10 +151,18 @@
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="142" y="6" key="SettingsEditor/0.0.1280.720@0.0.1280.720" timestamp="1651488819811" />
-    <state x="232" y="91" key="Vcs.Push.Dialog.v2" timestamp="1651444157148">
+    <state x="232" y="91" key="Vcs.Push.Dialog.v2" timestamp="1651490777066">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="232" y="91" key="Vcs.Push.Dialog.v2/0.0.1280.720@0.0.1280.720" timestamp="1651444157148" />
+    <state x="232" y="91" key="Vcs.Push.Dialog.v2/0.0.1280.720@0.0.1280.720" timestamp="1651490777066" />
+    <state x="0" y="0" width="587" height="720" key="find.popup" timestamp="1651500829404">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="0" y="0" width="587" height="720" key="find.popup/0.0.1280.720@0.0.1280.720" timestamp="1651500829404" />
+    <state x="413" y="261" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1651491083446">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="413" y="261" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1280.720@0.0.1280.720" timestamp="1651491083446" />
     <state x="297" y="161" width="672" height="677" key="run.anything.popup" timestamp="1651488891832">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
