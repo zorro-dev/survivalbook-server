@@ -49,7 +49,9 @@ class GroupController {
     async getAll(req, res, next) {
         let groups = await ForumGroup.findAll();
 
-        return res.json(groups)
+        return res.json({
+            groups
+        })
     }
 
 }

@@ -21,6 +21,11 @@
   <component name="ChangeListManager">
     <list default="true" id="49ac1dda-fa75-431d-ba7b-df326627ea58" name="Default Changelist" comment="Изменен ip бд">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/forum/groupController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/groupController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/forum/partController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/partController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/forum/themeController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/themeController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/forum/trackedController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/forum/trackedController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +47,8 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.build" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -58,7 +64,8 @@
       <workItem from="1649004761521" duration="219000" />
       <workItem from="1649005393358" duration="178000" />
       <workItem from="1649005579925" duration="1598000" />
-      <workItem from="1651441707112" duration="1822000" />
+      <workItem from="1651441707112" duration="4409000" />
+      <workItem from="1651488775616" duration="1049000" />
     </task>
     <task id="LOCAL-00001" summary="Добавлен запрос получения статья для Android">
       <created>1649016468460</created>
@@ -74,7 +81,21 @@
       <option name="project" value="LOCAL" />
       <updated>1651442323467</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Изменен ip бд">
+      <created>1651443750304</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1651443750304</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Изменен ip бд">
+      <created>1651444138910</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1651444138910</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,14 +123,34 @@
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="93" y="93" width="1095" height="535" key="DiffContextDialog/0.0.1280.720@0.0.1280.720" timestamp="1651442519092" />
-    <state x="142" y="6" key="SettingsEditor" timestamp="1651441781390">
+    <state width="1257" height="175" key="GridCell.Tab.0.bottom" timestamp="1651488868868">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="142" y="6" key="SettingsEditor/0.0.1280.720@0.0.1280.720" timestamp="1651441781390" />
-    <state x="232" y="91" key="Vcs.Push.Dialog.v2" timestamp="1651442330299">
+    <state width="1257" height="175" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1651488868868" />
+    <state width="1257" height="175" key="GridCell.Tab.0.center" timestamp="1651488868868">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="232" y="91" key="Vcs.Push.Dialog.v2/0.0.1280.720@0.0.1280.720" timestamp="1651442330299" />
+    <state width="1257" height="175" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1651488868868" />
+    <state width="1257" height="175" key="GridCell.Tab.0.left" timestamp="1651488868865">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state width="1257" height="175" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1651488868865" />
+    <state width="1257" height="175" key="GridCell.Tab.0.right" timestamp="1651488868868">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state width="1257" height="175" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1651488868868" />
+    <state x="142" y="6" key="SettingsEditor" timestamp="1651488819811">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="142" y="6" key="SettingsEditor/0.0.1280.720@0.0.1280.720" timestamp="1651488819811" />
+    <state x="232" y="91" key="Vcs.Push.Dialog.v2" timestamp="1651444157148">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="232" y="91" key="Vcs.Push.Dialog.v2/0.0.1280.720@0.0.1280.720" timestamp="1651444157148" />
+    <state x="297" y="161" width="672" height="677" key="run.anything.popup" timestamp="1651488891832">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="297" y="161" width="672" height="677" key="run.anything.popup/0.0.1280.720@0.0.1280.720" timestamp="1651488891832" />
     <state x="303" y="41" width="672" height="678" key="search.everywhere.popup" timestamp="1651442906937">
       <screen x="0" y="0" width="1280" height="720" />
     </state>

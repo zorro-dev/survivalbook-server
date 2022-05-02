@@ -64,7 +64,7 @@ class ThemeController {
   async getAll(req, res, next) {
     let themes = await ForumTheme.findAll();
 
-    return res.json(themes)
+    return res.json({themes})
   }
 
   async getMessages(req, res, next) {

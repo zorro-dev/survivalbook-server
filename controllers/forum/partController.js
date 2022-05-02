@@ -58,7 +58,9 @@ class PartController {
     async getAll(req, res, next) {
         let parts = await ForumPart.findAll();
 
-        return res.json(parts)
+        return res.json({
+            parts
+        })
     }
 
 }

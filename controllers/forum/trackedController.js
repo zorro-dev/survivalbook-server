@@ -70,7 +70,7 @@ class ThemeController {
       trackedThemes[i] = trackedTheme
     }
 
-    return res.json(trackedThemes)
+    return res.json({trackedThemes})
   }
 }
 
